@@ -19,10 +19,20 @@ let options = {
 
 const trakt = new Trakt(options);
 
+let lastWatching = null;
+
 async function traktCheck() {
   const watching = await trakt.users.watching({
     username: "papaya",
   });
+
+  const sWatching = JSON.stringify(watching);
+
+  if (sWatching == lastWatching) {
+    return;
+  }
+
+  lastWatching = JSON.stringify(watching);
 
   if (watching) {
     const endTimestamp = new Date(watching.data.expires_at);
@@ -46,8 +56,7 @@ async function traktCheck() {
           },
         ],
       });
-    }
-    if (watching.data.movie) {
+    } else if (watching.data.movie) {
       client.setActivity({
         details: `Watching: ${watching.data.movie.title}`,
         startTimestamp,
@@ -61,6 +70,8 @@ async function traktCheck() {
           },
         ],
       });
+    } else {
+      client.clearActivity();
     }
   }
 }
