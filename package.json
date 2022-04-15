@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "discord-rpc": "^4.0.1",
+    "trakt.tv": "^8.1.1"
+  }
+}
